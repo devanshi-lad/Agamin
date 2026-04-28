@@ -1,121 +1,250 @@
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Search, TrendingUp, BarChart3, PieChart, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Search, TrendingUp, BarChart3, PieChart, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
-const TickerItem = ({ symbol, price, change }) => (
-  <span className="flex items-center gap-2 text-sm font-medium text-tertiary mx-6">
-    {symbol} <span className="text-on-surface">{price}</span> 
-    <span className={change.startsWith('+') ? 'text-emerald-600' : 'text-rose-600'}>{change}</span>
-  </span>
-);
+const CG_API_KEY = 'CG-XgRkwptpUH4LFa6Mub8chHXH';
+
+const formatPrice = (price) => {
+  if (!price) return '—';
+  if (price >= 1000) return `$${price.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+  if (price >= 1) return `$${price.toFixed(2)}`;
+  return `$${price.toFixed(4)}`;
+};
+
+const formatLargeNum = (num) => {
+  if (!num) return '—';
+  if (num >= 1e12) return `$${(num / 1e12).toFixed(2)}T`;
+  if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
+  return `$${num.toLocaleString()}`;
+};
+
+// Inline scrolling ticker using CSS animation
+const TickerBand = ({ coins }) => {
+  if (!coins.length) return null;
+  const items = [...coins, ...coins]; // duplicate for seamless loop
+  return (
+    <div className="w-full overflow-hidden bg-white/30 backdrop-blur-sm border-b border-[#556069]/10 py-2.5">
+      <div className="ticker-track flex whitespace-nowrap" style={{ animation: 'tickerScroll 60s linear infinite' }}>
+        {items.map((coin, idx) => {
+          const change = coin.price_change_percentage_24h;
+          const isUp = change >= 0;
+          return (
+            <span key={idx} className="inline-flex items-center gap-2 mx-8 text-sm font-medium text-[#705953]">
+              <img src={coin.image} alt={coin.symbol} className="w-4 h-4 rounded-full" />
+              <span className="font-bold text-[#556069] uppercase tracking-wide">{coin.symbol}</span>
+              <span className="text-[#556069]">{formatPrice(coin.current_price)}</span>
+              <span className={isUp ? 'text-emerald-600 font-bold' : 'text-rose-500 font-bold'}>
+                {isUp ? '+' : ''}{change?.toFixed(2)}%
+              </span>
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 const Home = () => {
-  const tickerData = [
-    { symbol: 'BTC', price: '$64,231.40', change: '+1.24%' },
-    { symbol: 'ETH', price: '$3,452.12', change: '-0.45%' },
-    { symbol: 'SOL', price: '$142.88', change: '+4.12%' },
-    { symbol: 'ADA', price: '$0.45', change: '-2.10%' },
-    { symbol: 'DOT', price: '$7.21', change: '+0.88%' },
-    { symbol: 'LINK', price: '$18.44', change: '+5.54%' },
-    { symbol: 'MATIC', price: '$0.68', change: '-1.15%' },
-  ];
+  const [tickerCoins, setTickerCoins] = useState([]);
+  const [globalData, setGlobalData] = useState(null);
+  const [topGainer, setTopGainer] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const fetchHomeData = useCallback(async () => {
+    try {
+      const [coinsRes, globalRes] = await Promise.all([
+        fetch(
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false&price_change_percentage=24h`,
+          { headers: { 'x-cg-demo-api-key': CG_API_KEY } }
+        ),
+        fetch(`https://api.coingecko.com/api/v3/global`, {
+          headers: { 'x-cg-demo-api-key': CG_API_KEY },
+        }),
+      ]);
+
+      if (coinsRes.ok) {
+        const coins = await coinsRes.json();
+        setTickerCoins(coins);
+        // top gainer from first 20
+        const gainer = [...coins].sort(
+          (a, b) => (b.price_change_percentage_24h ?? 0) - (a.price_change_percentage_24h ?? 0)
+        )[0];
+        setTopGainer(gainer);
+      }
+      if (globalRes.ok) {
+        const g = await globalRes.json();
+        setGlobalData(g.data);
+      }
+    } catch (_) {}
+  }, []);
+
+  useEffect(() => {
+    fetchHomeData();
+    const interval = setInterval(fetchHomeData, 30000); // refresh every 30s on home
+    return () => clearInterval(interval);
+  }, [fetchHomeData]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) navigate(`/market?search=${encodeURIComponent(searchQuery.trim())}`);
+  };
+
+  const marketCap = globalData
+    ? formatLargeNum(globalData.total_market_cap?.usd)
+    : '—';
+  const volume = globalData
+    ? formatLargeNum(globalData.total_volume?.usd)
+    : '—';
+  const btcDom = globalData
+    ? `${globalData.market_cap_percentage?.btc?.toFixed(1)}%`
+    : '—';
+  const mcChange = globalData?.market_cap_change_percentage_24h_usd;
 
   return (
     <div className="pt-20">
-      {/* Scrolling Ticker */}
-      <div className="w-full overflow-hidden bg-surface-container-low py-3 border-b border-[#556069]/10">
-        <motion.div 
-          animate={{ x: [0, -1000] }}
-          transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
-          className="flex whitespace-nowrap"
-        >
-          {[...tickerData, ...tickerData].map((item, idx) => (
-            <TickerItem key={idx} {...item} />
-          ))}
-        </motion.div>
-      </div>
+      {/* Live Ticker */}
+      <TickerBand coins={tickerCoins} />
 
-      {/* Hero Section */}
+      {/* Ticker CSS */}
+      <style>{`
+        @keyframes tickerScroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .ticker-track { will-change: transform; }
+      `}</style>
+
+      {/* Hero */}
       <main className="relative mesh-gradient min-h-[80vh] flex flex-col items-center justify-center px-6 py-24">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center max-w-4xl mx-auto space-y-8"
         >
-          <h1 className="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter text-primary leading-tight">
+          <h1 className="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter text-[#556069] leading-tight">
             Track Every Coin. <br />
-            <span className="text-tertiary italic">Trade with Confidence.</span>
+            <span className="text-[#705953] italic">Trade with Confidence.</span>
           </h1>
           <p className="font-body text-xl md:text-2xl text-[#605d6a] max-w-2xl mx-auto leading-relaxed">
-            Real-time prices, market data, and portfolio tools for the digital era.
+            Real-time prices from CoinGecko, market data, and portfolio tools for the digital era.
           </p>
 
-          {/* Central Search Bar */}
-          <div className="relative w-full max-w-2xl mx-auto mt-12 group">
+          {/* Search */}
+          <form onSubmit={handleSearch} className="relative w-full max-w-2xl mx-auto mt-12">
             <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
-              <Search className="text-[#556069]/40" size={24} />
+              <Search className="text-[#556069]/40" size={22} />
             </div>
-            <input 
+            <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for a crypto (e.g. BTC, ETH, SOL)..."
-              className="w-full bg-white/60 backdrop-blur-md border-2 border-[#556069]/5 h-16 pl-16 pr-6 rounded-2xl text-lg text-on-surface placeholder:text-[#556069]/40 transition-all duration-300 focus:ring-0 focus:border-[#556069]/20 shadow-xl shadow-[#556069]/5"
+              className="w-full bg-white/70 backdrop-blur-md border-2 border-[#556069]/5 h-16 pl-16 pr-32 rounded-2xl text-lg text-[#556069] placeholder:text-[#556069]/30 transition-all duration-300 focus:outline-none focus:border-[#556069]/20 shadow-xl shadow-[#556069]/5"
             />
-          </div>
+            <button
+              type="submit"
+              className="absolute right-3 top-3 bottom-3 bg-[#556069] text-white px-6 rounded-xl font-bold text-sm hover:bg-[#3e4851] transition-colors"
+            >
+              Search
+            </button>
+          </form>
         </motion.div>
 
-        {/* Key Stat Cards */}
+        {/* Live Stat Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl mx-auto mt-24 px-4">
-          <StatCard title="Total Market Cap" value="$2.48T" change="+2.4%" icon={<TrendingUp />} />
-          <StatCard title="24h Trading Volume" value="$84.2B" change="-1.1%" icon={<BarChart3 />} color="rose" />
-          <StatCard title="BTC Dominance" value="52.4%" change="+0.8%" icon={<PieChart />} />
+          <StatCard
+            title="Total Market Cap"
+            value={marketCap}
+            change={mcChange != null ? `${mcChange >= 0 ? '+' : ''}${mcChange.toFixed(2)}%` : '+2.4%'}
+            icon={<TrendingUp />}
+            color={mcChange >= 0 ? 'emerald' : 'rose'}
+          />
+          <StatCard title="24h Trading Volume" value={volume} change="" icon={<BarChart3 />} color="primary" />
+          <StatCard title="BTC Dominance" value={btcDom} change="" icon={<PieChart />} color="emerald" />
         </div>
       </main>
 
-      {/* Market Pulse Section */}
+      {/* Market Pulse */}
       <section className="max-w-7xl mx-auto px-8 py-24">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <h2 className="font-headline text-3xl font-bold text-primary">Market Pulse</h2>
-            <p className="text-tertiary mt-2">Curated data points for the modern trader.</p>
+            <h2 className="font-headline text-3xl font-bold text-[#556069]">Market Pulse</h2>
+            <p className="text-[#705953] mt-2">Live data from CoinGecko — updated in real-time.</p>
           </div>
-          <Link to="/market" className="flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+          <Link to="/market" className="flex items-center gap-2 text-[#556069] font-bold hover:gap-4 transition-all">
             View all markets <ArrowRight size={20} />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-          <motion.div 
-            whileHover={{ y: -5 }}
-            className="md:col-span-8 bg-white/40 backdrop-blur-sm border border-[#556069]/5 rounded-3xl p-10 flex flex-col md:flex-row gap-12 items-center shadow-lg shadow-[#556069]/5"
+          {/* Top coins mini list */}
+          <motion.div
+            whileHover={{ y: -4 }}
+            className="md:col-span-8 bg-white/40 backdrop-blur-sm border border-[#556069]/5 rounded-3xl p-8 shadow-lg shadow-[#556069]/5"
           >
-            <div className="w-full md:w-1/2 space-y-6">
-              <h3 className="font-headline text-2xl font-bold text-primary">Advanced Algorithm Predictions</h3>
-              <p className="text-[#605d6a] leading-relaxed">
-                Leverage our state-of-the-art predictive models to anticipate market movements for the top cryptocurrencies.
-              </p>
-              <Link to="/prediction" className="inline-block bg-primary text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
-                Read Analysis
-              </Link>
+            <h3 className="font-headline text-xl font-bold text-[#556069] mb-6">Top Coins by Market Cap</h3>
+            <div className="space-y-4">
+              {(tickerCoins.slice(0, 5)).map((coin, i) => {
+                const ch = coin.price_change_percentage_24h;
+                const isUp = ch >= 0;
+                return (
+                  <div key={coin.id} className="flex items-center gap-4 group hover:bg-white/50 p-3 rounded-2xl transition-colors cursor-pointer">
+                    <span className="text-xs font-bold text-[#705953] w-4">{i + 1}</span>
+                    <img src={coin.image} alt={coin.symbol} className="w-8 h-8 rounded-full" />
+                    <div className="flex-1">
+                      <p className="font-bold text-[#556069] text-sm">{coin.name}</p>
+                      <p className="text-xs text-[#705953]/60 font-medium uppercase">{coin.symbol}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-[#556069] text-sm">{formatPrice(coin.current_price)}</p>
+                      <p className={`text-xs font-bold flex items-center justify-end gap-0.5 ${isUp ? 'text-emerald-600' : 'text-rose-500'}`}>
+                        <ArrowUpRight size={11} className={isUp ? '' : 'rotate-180'} />
+                        {Math.abs(ch ?? 0).toFixed(2)}%
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className="w-full md:w-1/2 aspect-video bg-[#c5d0db]/20 rounded-2xl overflow-hidden">
-               <img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=800" alt="Crypto Vision" className="w-full h-full object-cover mix-blend-overlay opacity-60" />
-            </div>
+            <Link to="/market" className="mt-6 block text-center text-sm font-bold text-[#556069]/60 hover:text-[#556069] transition-colors">
+              See all 20 coins →
+            </Link>
           </motion.div>
 
-          <motion.div 
-            whileHover={{ y: -5 }}
+          {/* Top Gainer */}
+          <motion.div
+            whileHover={{ y: -4 }}
             className="md:col-span-4 bg-[#e6c8bf] rounded-3xl p-10 flex flex-col justify-between shadow-lg shadow-[#705953]/10"
           >
             <div>
-              <span className="inline-block px-3 py-1 bg-white/20 text-[#705953] text-xs font-bold rounded-full mb-4 uppercase tracking-wider">Trending</span>
-              <h3 className="font-headline text-xl font-bold text-[#705953]">Top Gainer: PEPE</h3>
+              <span className="inline-block px-3 py-1 bg-white/20 text-[#705953] text-xs font-bold rounded-full mb-4 uppercase tracking-wider">
+                🔥 Top Gainer (24h)
+              </span>
+              {topGainer && (
+                <div className="flex items-center gap-3 mt-2">
+                  <img src={topGainer.image} alt={topGainer.symbol} className="w-10 h-10 rounded-full" />
+                  <h3 className="font-headline text-xl font-bold text-[#705953]">{topGainer.name}</h3>
+                </div>
+              )}
             </div>
-            <div className="mt-8">
-              <span className="text-4xl font-extrabold text-[#705953]">+45.2%</span>
-              <p className="text-[#705953]/70 mt-1">Movement in last 24h</p>
-            </div>
-            <div className="mt-8 h-20 w-full bg-[#705953]/10 rounded-xl"></div>
+            {topGainer && (
+              <div className="mt-8 space-y-2">
+                <span className="text-4xl font-extrabold text-[#705953]">
+                  +{topGainer.price_change_percentage_24h?.toFixed(2)}%
+                </span>
+                <p className="text-[#705953]/70">Movement in last 24h</p>
+                <p className="text-[#705953] font-bold">{formatPrice(topGainer.current_price)}</p>
+              </div>
+            )}
+            <Link
+              to="/market"
+              className="mt-8 block text-center bg-white/40 text-[#705953] py-3 rounded-2xl font-bold hover:bg-white transition-colors"
+            >
+              View Market →
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -124,20 +253,22 @@ const Home = () => {
 };
 
 const StatCard = ({ title, value, change, icon, color = 'emerald' }) => (
-  <motion.div 
+  <motion.div
     whileHover={{ y: -5 }}
     className="bg-white/40 backdrop-blur-sm border border-[#556069]/5 p-8 rounded-3xl relative overflow-hidden group shadow-lg shadow-[#556069]/5"
   >
     <div className="relative z-10 flex flex-col justify-between h-full space-y-4">
       <span className="text-sm font-semibold uppercase tracking-widest text-[#705953]">{title}</span>
       <div className="flex items-end justify-between">
-        <span className="text-3xl font-bold text-primary font-headline tracking-tight">{value}</span>
-        <div className="flex flex-col items-end">
-          <span className={`text-${color}-600 text-sm font-bold`}>{change}</span>
-        </div>
+        <span className="text-3xl font-bold text-[#556069] font-headline tracking-tight">{value}</span>
+        {change && (
+          <span className={`text-sm font-bold ${color === 'emerald' ? 'text-emerald-600' : color === 'rose' ? 'text-rose-500' : 'text-[#556069]'}`}>
+            {change}
+          </span>
+        )}
       </div>
     </div>
-    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity text-[#556069]">
       {icon}
     </div>
   </motion.div>
