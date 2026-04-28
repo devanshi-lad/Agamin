@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { CryptoState } from "../CryptoContext";
 
 const Market = () => {
@@ -104,9 +105,11 @@ const Market = () => {
           <tbody>
             {coins.map((coin) => (
               <tr key={coin.id} style={{ borderBottom: '1px solid #eee' }}>
-                <td style={{ padding: '15px', display: 'flex', alignItems: 'center', fontWeight: 'bold', color: '#000' }}>
-                  <img src={coin.image} alt={coin.name} width="30" style={{ marginRight: '10px' }} />
-                  {coin.name}
+                <td style={{ padding: '15px', fontWeight: 'bold', color: '#000' }}>
+                  <Link to={`/coin/${coin.id}`} style={{ display: 'flex', alignItems: 'center', color: 'inherit', textDecoration: 'none' }}>
+                    <img src={coin.image} alt={coin.name} width="30" style={{ marginRight: '10px' }} />
+                    {coin.name}
+                  </Link>
                 </td>
                 <td style={{ padding: '15px', fontWeight: 'bold', color: '#000' }}>
                   ${coin.current_price.toLocaleString()}

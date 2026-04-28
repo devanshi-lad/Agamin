@@ -8,7 +8,7 @@ import Prediction from './pages/Prediction';
 import About from './pages/About';
 import Ecosystem from './pages/Ecosystem';
 import Portfolio from './pages/Portfolio';
-import Bitcoin from './pages/Bitcoin';
+import CoinDetail from './pages/CoinDetail';
 import Learn from './pages/Learn';
 import NFTs from './pages/NFTs';
 import Exchanges from './pages/Exchanges';
@@ -27,7 +27,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/ecosystem" element={<Ecosystem />} />
             <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/bitcoin" element={<Bitcoin />} />
+            <Route path="/coin/:id" element={<CoinDetail />} />
             <Route path="/learn" element={<Learn />} />
             <Route path="/nfts" element={<NFTs />} />
             <Route path="/exchanges" element={<Exchanges />} />
