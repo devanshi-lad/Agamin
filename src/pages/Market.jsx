@@ -24,7 +24,7 @@ const Market = () => {
     if (!username) return alert("Please enter a username first!");
     
     // REPLACE THE URL BELOW WITH THE ONE YOU COPIED FROM THE PORTS TAB
-    const BACKEND_URL = "https://zany-space-guide-pjq6xjpj5x963997g-5000.app.github.dev";
+    const BACKEND_URL = "https://agamin-backend.onrender.com";
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/save`, {
