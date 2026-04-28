@@ -1,16 +1,173 @@
-# React + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# ⚡ Agamin — Track Every Coin
 
-Currently, two official plugins are available:
+**A premium, modern cryptocurrency tracking platform built with React.**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-## React Compiler
+> *Real-time prices, market data, and portfolio tools — designed for the modern investor.*
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+</div>
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ✨ Features
+
+- 📈 **Live Market Data** — Track the top cryptocurrencies with price, volume, and market cap
+- 🤖 **AI Predictions** — Algorithm-powered market sentiment and price forecasts
+- 💼 **Portfolio Tracker** — Monitor your holdings with activity history
+- 🖼️ **NFT Market** — Browse and track top NFT collections
+- 🔄 **Exchange Rankings** — Compare global exchanges by volume, liquidity, and security
+- 📚 **Education Hub** — Learn trading strategies and blockchain fundamentals
+- 🎨 **Premium UI/UX** — Glassmorphism design with smooth Framer Motion animations
+- ⚡ **Blazing Fast** — Built on Vite 6 for near-instant hot module replacement
+
+---
+
+## 🖥️ Pages
+
+| Page | Route | Description |
+|------|-------|-------------|
+| 🏠 Home | `/` | Hero, market ticker, stats & market pulse |
+| 📊 Market | `/market` | Crypto table with filters and price changes |
+| 🔮 Prediction | `/prediction` | AI sentiment analysis and forecasts |
+| 🧬 Ecosystem | `/ecosystem` | Platform infrastructure overview |
+| 💼 Portfolio | `/portfolio` | Asset holdings and recent activity |
+| ₿ Bitcoin | `/bitcoin` | Deep-dive into BTC stats and information |
+| 📚 Learn | `/learn` | Education articles and tutorials |
+| 🖼️ NFTs | `/nfts` | NFT collections and market trends |
+| 🔁 Exchanges | `/exchanges` | Top exchange rankings and comparisons |
+| ℹ️ About | `/about` | Company mission and values |
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| React | 19 | UI Framework |
+| Vite | 6.0 | Build Tool & Dev Server |
+| Tailwind CSS | 4.x | Utility-First Styling |
+| Framer Motion | 12 | Animations & Transitions |
+| React Router DOM | 7 | Client-Side Routing |
+| Lucide React | Latest | Icon Library |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** — version `20.19+` or `22.12+` recommended  
+  *(If on Node `22.11`, Vite v6 is already pinned in this project for compatibility)*
+- **npm** — version `8+`
+
+### Installation
+
+**1. Clone the repository**
+```bash
+git clone https://github.com/Pawan-Punjabi/Agamin.git
+cd Agamin
+```
+
+**2. Install dependencies**
+```bash
+npm install
+```
+
+**3. Start the development server**
+```bash
+npm run dev
+```
+
+**4. Open in browser**
+```
+http://localhost:5173
+```
+
+---
+
+## 📦 Available Scripts
+
+| Script | Command | Description |
+|--------|---------|-------------|
+| Dev Server | `npm run dev` | Start local dev server with HMR |
+| Build | `npm run build` | Build optimized production bundle |
+| Preview | `npm run preview` | Preview production build locally |
+| Lint | `npm run lint` | Run ESLint on the codebase |
+
+---
+
+## 📁 Project Structure
+
+```
+Agamin/
+├── public/               # Static assets (favicon, icons)
+├── src/
+│   ├── components/
+│   │   ├── Navbar.jsx    # Navigation bar with active route highlighting
+│   │   └── Footer.jsx    # Site-wide footer with links
+│   ├── pages/
+│   │   ├── Home.jsx      # Landing page with ticker and stats
+│   │   ├── Market.jsx    # Crypto market table
+│   │   ├── Prediction.jsx# AI predictions dashboard
+│   │   ├── Ecosystem.jsx # Platform ecosystem overview
+│   │   ├── Portfolio.jsx # User portfolio tracker
+│   │   ├── Bitcoin.jsx   # Bitcoin detail page
+│   │   ├── Learn.jsx     # Education hub
+│   │   ├── NFTs.jsx      # NFT collections
+│   │   ├── Exchanges.jsx # Exchange rankings
+│   │   └── About.jsx     # About page
+│   ├── App.jsx           # Root component with routing
+│   ├── main.jsx          # React DOM entry point
+│   └── index.css         # Global styles + Tailwind imports
+├── index.html            # HTML entry point
+├── vite.config.js        # Vite configuration
+├── package.json          # Dependencies and scripts
+└── README.md             # You are here!
+```
+
+---
+
+## 🎨 Design System
+
+Agamin uses a hand-crafted design token system built on **Tailwind CSS v4**:
+
+- **Primary:** `#556069` — Muted blue-grey for primary actions
+- **Tertiary:** `#705953` — Warm mauve for accents and highlights
+- **Background:** `#fff7fa` — Soft warm white
+- **Typography:** `Epilogue` (headlines) + `Plus Jakarta Sans` (body)
+- **Effects:** Glassmorphism, mesh gradients, backdrop blur
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/AmazingFeature`
+3. Commit your changes: `git commit -m 'Add some AmazingFeature'`
+4. Push to the branch: `git push origin feature/AmazingFeature`
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+<div align="center">
+
+**Built with ❤️ by [Pawan Punjabi](https://github.com/Pawan-Punjabi)**
+
+⭐ *If you like this project, give it a star!* ⭐
+
+</div>
