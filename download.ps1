@@ -1,0 +1,13 @@
+$urls = @{
+  "index.html" = "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzg3OTM4NTEzNzFmMzRjZWQ4MTcyOTY4MDU4NjZhZjU3EgsSBxDjm-_R8hQYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDgyOTY2NDAwNTExMTc2MjkyOQ&filename=&opi=89354086"
+  "market.html" = "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzgyZmIzNzI3OWVmOTQ2ZGNhZTdjYmIxYzNhZmM1NjJiEgsSBxDjm-_R8hQYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDgyOTY2NDAwNTExMTc2MjkyOQ&filename=&opi=89354086"
+  "ecosystem.html" = "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzc2Y2Y5YmEwZTlmZjRkYWQ5MGJjMDg4OGU5NDk3NWEwEgsSBxDjm-_R8hQYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDgyOTY2NDAwNTExMTc2MjkyOQ&filename=&opi=89354086"
+  "portfolio.html" = "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2I5MDk3OWEzOGFmNzRlMzA5ZTczNWYzM2Q1NjQwOWVkEgsSBxDjm-_R8hQYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDgyOTY2NDAwNTExMTc2MjkyOQ&filename=&opi=89354086"
+  "bitcoin.html" = "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzg2MWZiNTgzZTQxNzRlZjdiMGUwNTEyODM2OGU0ZmQwEgsSBxDjm-_R8hQYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDgyOTY2NDAwNTExMTc2MjkyOQ&filename=&opi=89354086"
+  "learn.html" = "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzA0ZDZjMjZhNjAzMjQ4NjA4M2ZmODJlNjEzYWY1MTFkEgsSBxDjm-_R8hQYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDgyOTY2NDAwNTExMTc2MjkyOQ&filename=&opi=89354086"
+  "nfts.html" = "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2YxZmQ3MjUxMTBkNTQ4MjM4NTA3YmIzMWQ4ZjM4OWFmEgsSBxDjm-_R8hQYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDgyOTY2NDAwNTExMTc2MjkyOQ&filename=&opi=89354086"
+  "exchanges.html" = "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sX2JkZTUxNTNiNTFiYTQ3MmQ5ZjAwYTE0NzAwZjhmNmViEgsSBxDjm-_R8hQYAZIBJAoKcHJvamVjdF9pZBIWQhQxNDgyOTY2NDAwNTExMTc2MjkyOQ&filename=&opi=89354086"
+}
+foreach ($key in $urls.Keys) {
+  Invoke-WebRequest -Uri $urls[$key] -OutFile $key
+}
