@@ -1,411 +1,145 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Star, ArrowUpRight, ArrowDownRight, Filter, RefreshCw, Wifi, WifiOff, TrendingUp, Search } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { AreaChart, Area, ResponsiveContainer, Tooltip } from 'recharts';
-
-const CG_API_KEY = 'CG-XgRkwptpUH4LFa6Mub8chHXH';
-const REFRESH_INTERVAL = 10000; // 10 seconds
-
-const formatPrice = (price) => {
-  if (price === null || price === undefined) return '—';
-  if (price >= 1000) return `$${price.toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
-  if (price >= 1) return `$${price.toFixed(2)}`;
-  if (price >= 0.01) return `$${price.toFixed(4)}`;
-  return `$${price.toFixed(6)}`;
-};
-
-const formatLargeNum = (num) => {
-  if (!num) return '—';
-  if (num >= 1e12) return `$${(num / 1e12).toFixed(2)}T`;
-  if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
-  if (num >= 1e6) return `$${(num / 1e6).toFixed(2)}M`;
-  return `$${num.toLocaleString()}`;
-};
-
-const formatChange = (val) => {
-  if (val === null || val === undefined) return '—';
-  return `${val >= 0 ? '+' : ''}${val.toFixed(2)}%`;
-};
-
-// Sparkline chart from 7d price data
-const SparklineChart = ({ prices, isPositive }) => {
-  if (!prices || prices.length === 0) return <div className="w-28 h-10 bg-[#556069]/5 rounded-lg" />;
-
-  const data = prices.map((p, i) => ({ i, v: p }));
-  const color = isPositive ? '#10b981' : '#f43f5e';
-
-  return (
-    <div className="w-28 h-10">
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 2, right: 0, bottom: 2, left: 0 }}>
-          <defs>
-            <linearGradient id={`grad-${isPositive ? 'up' : 'down'}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={color} stopOpacity={0.3} />
-              <stop offset="95%" stopColor={color} stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <Area
-            type="monotone"
-            dataKey="v"
-            stroke={color}
-            strokeWidth={1.5}
-            fill={`url(#grad-${isPositive ? 'up' : 'down'})`}
-            dot={false}
-            isAnimationActive={false}
-          />
-          <Tooltip
-            content={({ active, payload }) =>
-              active && payload?.length ? (
-                <div className="bg-white text-xs px-2 py-1 rounded shadow text-[#556069] font-bold border border-[#556069]/10">
-                  {formatPrice(payload[0].value)}
-                </div>
-              ) : null
-            }
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-    </div>
-  );
-};
-
-// Blinking live dot
-const LiveDot = () => (
-  <span className="relative flex h-2.5 w-2.5">
-    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-  </span>
-);
-
-const FILTERS = ['All', 'DeFi', 'Layer 1', 'Layer 2', 'Metaverse', 'Meme', 'Stablecoins'];
+import React, { useState } from 'react';
+import { CryptoState } from "../CryptoContext";
 
 const Market = () => {
-  const [cryptos, setCryptos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [lastUpdated, setLastUpdated] = useState(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [online, setOnline] = useState(true);
-  const [watchlist, setWatchlist] = useState(new Set());
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [search, setSearch] = useState('');
-  const [countdown, setCountdown] = useState(10);
-  const intervalRef = useRef(null);
-  const countdownRef = useRef(null);
+  const { coins, watchlist, setWatchlist, alerts, setAlerts } = CryptoState();
+  const [username, setUsername] = useState("");
+  const [thresholdInput, setThresholdInput] = useState({});
 
-  const fetchData = useCallback(async (isManual = false) => {
-    if (isManual) setIsRefreshing(true);
-    try {
-      const res = await fetch(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d`,
-        {
-          headers: { 'x-cg-demo-api-key': CG_API_KEY },
-        }
-      );
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
-      const data = await res.json();
-      setCryptos(data);
-      setLastUpdated(new Date());
-      setError(null);
-      setOnline(true);
-    } catch (err) {
-      setError(err.message);
-      setOnline(false);
-    } finally {
-      setLoading(false);
-      setIsRefreshing(false);
-      setCountdown(10);
+  const handleBookmark = (coinId) => {
+    if (!watchlist.includes(coinId)) {
+      setWatchlist([...watchlist, coinId]);
+      alert(`${coinId} bookmarked locally!`);
     }
-  }, []);
-
-  // Auto-refresh every 10s
-  useEffect(() => {
-    fetchData();
-    intervalRef.current = setInterval(() => fetchData(), REFRESH_INTERVAL);
-    return () => clearInterval(intervalRef.current);
-  }, [fetchData]);
-
-  // Live countdown timer
-  useEffect(() => {
-    countdownRef.current = setInterval(() => {
-      setCountdown((prev) => (prev <= 1 ? 10 : prev - 1));
-    }, 1000);
-    return () => clearInterval(countdownRef.current);
-  }, []);
-
-  const toggleWatchlist = (id) => {
-    setWatchlist((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
   };
 
-  const filtered = cryptos.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase()) ||
-    c.symbol.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleSetAlert = (coinId) => {
+    const value = thresholdInput[coinId];
+    if (!value) return alert("Please enter a target price");
+    setAlerts([...alerts, { id: coinId, value: parseFloat(value) }]);
+    alert(`Alert set for ${coinId} at $${value}`);
+  };
+
+  const saveToCloud = async () => {
+    if (!username) return alert("Please enter a username first!");
+    
+    // REPLACE THE URL BELOW WITH THE ONE YOU COPIED FROM THE PORTS TAB
+    const BACKEND_URL = "https://zany-space-guide-pjq6xjpj5x963997g-5000.app.github.dev";
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/save`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, bookmarks: watchlist, alerts })
+      });
+
+      if (response.ok) alert("✅ Success! Data synced to Cloud MongoDB.");
+      else alert("❌ Sync failed. Check if the terminal is running 'node server.js'");
+    } catch (error) {
+      console.error(error);
+      alert("Error: Could not connect to backend server. Make sure port 5000 is set to PUBLIC in the Ports tab.");
+    }
+  };
 
   return (
-    <div className="pt-28 pb-20 px-4 md:px-8 max-w-screen-2xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
-        <div className="space-y-2">
-          <motion.h1
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-[#556069]"
-          >
-            Live Market
-          </motion.h1>
-          <p className="text-[#705953] text-base max-w-xl font-body">
-            Real-time prices from CoinGecko — updating every 10 seconds.
-          </p>
-        </div>
-
-        {/* Status bar */}
-        <div className="flex items-center gap-4">
-          {online ? (
-            <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-full">
-              <LiveDot />
-              <span className="text-emerald-700 text-xs font-bold">
-                LIVE — refreshing in {countdown}s
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2 bg-rose-50 border border-rose-200 px-4 py-2 rounded-full">
-              <WifiOff size={14} className="text-rose-500" />
-              <span className="text-rose-700 text-xs font-bold">Offline</span>
-            </div>
-          )}
-          <button
-            onClick={() => fetchData(true)}
-            disabled={isRefreshing}
-            className="flex items-center gap-2 bg-[#556069] text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-[#3e4851] transition-all disabled:opacity-50"
-          >
-            <RefreshCw size={15} className={isRefreshing ? 'animate-spin' : ''} />
-            Refresh
-          </button>
-        </div>
+    <div style={{ 
+      padding: '20px', 
+      backgroundColor: '#f4f7f6', 
+      minHeight: '100vh', 
+      color: '#333', 
+      fontFamily: 'Arial',
+      marginTop: '80px' // THIS PUSHES IT DOWN FROM THE NAVBAR
+    }}>
+      
+      {/* CLOUD SYNC SECTION (Now Blue so we can see it) */}
+      <div style={{ 
+        backgroundColor: '#e3f2fd', // Light Blue Background
+        padding: '25px', 
+        borderRadius: '12px', 
+        marginBottom: '30px', 
+        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', 
+        border: '2px solid #2196f3',
+        display: 'flex', 
+        gap: '15px', 
+        alignItems: 'center',
+        flexWrap: 'wrap'
+      }}>
+        <h3 style={{ margin: 0, color: '#0d47a1' }}>Database Sync:</h3>
+        <input 
+          type="text" 
+          placeholder="Type Username Here..." 
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{ padding: '12px', border: '1px solid #90caf9', borderRadius: '5px', width: '250px', fontSize: '16px' }}
+        />
+        <button 
+          onClick={saveToCloud}
+          style={{ 
+            padding: '12px 25px', 
+            backgroundColor: '#1976d2', 
+            color: 'white', 
+            border: 'none', 
+            borderRadius: '5px', 
+            cursor: 'pointer', 
+            fontWeight: 'bold',
+            fontSize: '16px'
+          }}>
+          ☁️ Sync to Cloud MongoDB
+        </button>
       </div>
 
-      {/* Search + Filters */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
-        <div className="relative flex-1 max-w-sm">
-          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#556069]/40" />
-          <input
-            type="text"
-            placeholder="Search coins..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-white/60 border border-[#556069]/10 rounded-xl text-sm text-[#556069] placeholder:text-[#556069]/30 focus:outline-none focus:border-[#556069]/30"
-          />
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {FILTERS.map((f) => (
-            <button
-              key={f}
-              onClick={() => setActiveFilter(f)}
-              className={`px-4 py-2 rounded-full font-medium text-sm transition-all ${
-                activeFilter === f
-                  ? 'bg-[#556069] text-white shadow-md shadow-[#556069]/20'
-                  : 'bg-white/50 text-[#556069] border border-[#556069]/10 hover:bg-white'
-              }`}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
+      <h1 style={{ color: '#000', marginBottom: '20px' }}>Live Crypto Market</h1>
+
+      {/* TABLE SECTION */}
+      <div style={{ backgroundColor: '#fff', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+          <thead>
+            <tr style={{ backgroundColor: '#2c3e50', color: '#fff' }}>
+              <th style={{ padding: '15px' }}>Coin</th>
+              <th style={{ padding: '15px' }}>Price (USD)</th>
+              <th style={{ padding: '15px' }}>24h Change</th>
+              <th style={{ padding: '15px' }}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {coins.map((coin) => (
+              <tr key={coin.id} style={{ borderBottom: '1px solid #eee' }}>
+                <td style={{ padding: '15px', display: 'flex', alignItems: 'center', fontWeight: 'bold', color: '#000' }}>
+                  <img src={coin.image} alt={coin.name} width="30" style={{ marginRight: '10px' }} />
+                  {coin.name}
+                </td>
+                <td style={{ padding: '15px', fontWeight: 'bold', color: '#000' }}>
+                  ${coin.current_price.toLocaleString()}
+                </td>
+                <td style={{ padding: '15px', fontWeight: 'bold', color: coin.price_change_percentage_24h > 0 ? '#2ecc71' : '#e74c3c' }}>
+                  {coin.price_change_percentage_24h.toFixed(2)}%
+                </td>
+                <td style={{ padding: '15px' }}>
+                  <button 
+                    onClick={() => handleBookmark(coin.id)}
+                    style={{ padding: '8px 12px', backgroundColor: watchlist.includes(coin.id) ? '#95a5a6' : '#f1c40f', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '10px', fontWeight: 'bold', color: '#000' }}>
+                    {watchlist.includes(coin.id) ? "⭐ Bookmarked" : "⭐ Bookmark"}
+                  </button>
+                  
+                  <input 
+                    type="number" 
+                    placeholder="Price"
+                    style={{ padding: '8px', width: '80px', border: '1px solid #ccc', borderRadius: '4px', marginRight: '5px' }}
+                    onChange={(e) => setThresholdInput({...thresholdInput, [coin.id]: e.target.value})}
+                  />
+                  <button 
+                    onClick={() => handleSetAlert(coin.id)}
+                    style={{ padding: '8px 12px', backgroundColor: '#3498db', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+                    Set Alert
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-
-      {/* Error Banner */}
-      {error && (
-        <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-3">
-          <WifiOff size={18} className="text-rose-500 shrink-0" />
-          <p className="text-rose-700 text-sm font-medium">
-            Failed to fetch data: {error}. Retrying automatically...
-          </p>
-        </div>
-      )}
-
-      {/* Table */}
-      <div className="bg-white/40 backdrop-blur-md rounded-3xl border border-[#556069]/5 overflow-hidden shadow-2xl shadow-[#556069]/5">
-        {loading ? (
-          <SkeletonTable />
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-separate border-spacing-0">
-              <thead>
-                <tr className="bg-[#556069]/5 text-[#556069]/60 text-[11px] font-bold uppercase tracking-wider">
-                  <th className="py-5 px-6"><Star size={13} /></th>
-                  <th className="py-5 px-3">#</th>
-                  <th className="py-5 px-4 min-w-[200px]">Coin</th>
-                  <th className="py-5 px-4">Price</th>
-                  <th className="py-5 px-4">1h %</th>
-                  <th className="py-5 px-4">24h %</th>
-                  <th className="py-5 px-4">7d %</th>
-                  <th className="py-5 px-4 text-right">Market Cap</th>
-                  <th className="py-5 px-4 text-right">Volume 24h</th>
-                  <th className="py-5 px-6 text-center">7d Chart</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#556069]/5 text-sm font-body">
-                <AnimatePresence>
-                  {filtered.map((coin, index) => {
-                    const is24hUp = (coin.price_change_percentage_24h_in_currency ?? 0) >= 0;
-                    const sparkPrices = coin.sparkline_in_7d?.price ?? [];
-                    const isWatched = watchlist.has(coin.id);
-
-                    return (
-                      <motion.tr
-                        key={coin.id}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.03, duration: 0.3 }}
-                        className="hover:bg-white/60 transition-colors group cursor-pointer"
-                      >
-                        {/* Watchlist star */}
-                        <td className="py-5 px-6">
-                          <button onClick={() => toggleWatchlist(coin.id)}>
-                            <Star
-                              size={16}
-                              className={`transition-colors ${
-                                isWatched
-                                  ? 'text-amber-400 fill-amber-400'
-                                  : 'text-[#556069]/20 group-hover:text-amber-400'
-                              }`}
-                            />
-                          </button>
-                        </td>
-
-                        {/* Rank */}
-                        <td className="py-5 px-3 font-medium text-[#705953] text-sm">{coin.market_cap_rank}</td>
-
-                        {/* Name */}
-                        <td className="py-5 px-4">
-                          <div className="flex items-center gap-3">
-                            <img
-                              src={coin.image}
-                              alt={coin.symbol}
-                              className="w-9 h-9 rounded-full bg-white p-1 shadow-sm border border-[#556069]/5 object-contain"
-                            />
-                            <div>
-                              <Link
-                                to={`/bitcoin`}
-                                className="font-bold text-[#556069] block leading-tight hover:text-primary hover:underline"
-                              >
-                                {coin.name}
-                              </Link>
-                              <span className="text-[#705953] text-[11px] font-semibold uppercase tracking-wide">
-                                {coin.symbol}
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* Price */}
-                        <td className="py-5 px-4 font-bold text-[#556069] tabular-nums">
-                          {formatPrice(coin.current_price)}
-                        </td>
-
-                        {/* 1h */}
-                        <PriceCell val={coin.price_change_percentage_1h_in_currency} />
-
-                        {/* 24h */}
-                        <PriceCell val={coin.price_change_percentage_24h_in_currency} />
-
-                        {/* 7d */}
-                        <PriceCell val={coin.price_change_percentage_7d_in_currency} />
-
-                        {/* Market Cap */}
-                        <td className="py-5 px-4 text-right font-medium text-[#556069] tabular-nums">
-                          {formatLargeNum(coin.market_cap)}
-                        </td>
-
-                        {/* Volume */}
-                        <td className="py-5 px-4 text-right font-medium text-[#556069] tabular-nums">
-                          {formatLargeNum(coin.total_volume)}
-                        </td>
-
-                        {/* Sparkline */}
-                        <td className="py-5 px-6">
-                          <div className="flex justify-center">
-                            <SparklineChart prices={sparkPrices} isPositive={is24hUp} />
-                          </div>
-                        </td>
-                      </motion.tr>
-                    );
-                  })}
-                </AnimatePresence>
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {/* Footer */}
-        <div className="px-8 py-5 border-t border-[#556069]/5 flex flex-col md:flex-row items-center justify-between gap-3">
-          <span className="text-[#705953]/60 text-xs font-medium">
-            Showing <span className="font-bold text-[#556069]">{filtered.length}</span> coins · Powered by CoinGecko
-          </span>
-          {lastUpdated && (
-            <span className="text-[#556069]/40 text-xs">
-              Last updated: {lastUpdated.toLocaleTimeString()}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Watchlist hint */}
-      {watchlist.size > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-6 flex items-center gap-3 bg-amber-50 border border-amber-200 px-6 py-3 rounded-2xl"
-        >
-          <Star size={16} className="text-amber-400 fill-amber-400 shrink-0" />
-          <p className="text-amber-700 text-sm font-medium">
-            {watchlist.size} coin{watchlist.size > 1 ? 's' : ''} in your watchlist
-          </p>
-        </motion.div>
-      )}
     </div>
   );
 };
-
-// Price change cell
-const PriceCell = ({ val }) => {
-  const isUp = (val ?? 0) >= 0;
-  return (
-    <td className={`py-5 px-4 font-bold tabular-nums ${isUp ? 'text-emerald-600' : 'text-rose-500'}`}>
-      <div className="flex items-center gap-0.5">
-        {isUp ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
-        {Math.abs(val ?? 0).toFixed(2)}%
-      </div>
-    </td>
-  );
-};
-
-// Skeleton loading state
-const SkeletonTable = () => (
-  <div className="p-8 space-y-4">
-    <div className="flex items-center gap-3 mb-6">
-      <div className="h-5 w-5 bg-[#556069]/10 rounded animate-pulse" />
-      <div className="h-4 w-48 bg-[#556069]/10 rounded animate-pulse" />
-    </div>
-    {Array.from({ length: 10 }).map((_, i) => (
-      <div key={i} className="flex items-center gap-6 py-3">
-        <div className="w-8 h-8 bg-[#556069]/10 rounded-full animate-pulse shrink-0" />
-        <div className="flex-1 space-y-1.5">
-          <div className="h-3.5 bg-[#556069]/10 rounded w-32 animate-pulse" />
-          <div className="h-2.5 bg-[#556069]/5 rounded w-16 animate-pulse" />
-        </div>
-        <div className="h-3.5 bg-[#556069]/10 rounded w-20 animate-pulse" />
-        <div className="h-3.5 bg-emerald-100 rounded w-14 animate-pulse" />
-        <div className="h-3.5 bg-[#556069]/10 rounded w-24 animate-pulse" />
-        <div className="h-8 bg-[#556069]/5 rounded-lg w-24 animate-pulse" />
-      </div>
-    ))}
-  </div>
-);
 
 export default Market;
