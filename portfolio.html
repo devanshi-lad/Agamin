@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agamin | Portfolio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-container": "#e2dded",
+                        "surface-dim": "#e0d8db",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#bdc8d2",
+                        "inverse-on-surface": "#f7eff2",
+                        "surface-container": "#f4ecef",
+                        "tertiary-fixed-dim": "#dec0b8",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-container": "#c5d0db",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#1c1a25",
+                        "surface-container-low": "#faf1f4",
+                        "on-primary-fixed-variant": "#3e4851",
+                        "on-surface": "#1e1b1d",
+                        "inverse-surface": "#332f32",
+                        "on-tertiary-fixed": "#281713",
+                        "secondary-fixed": "#e5e0f0",
+                        "on-primary-fixed": "#131d25",
+                        "on-primary-container": "#4f5962",
+                        "surface-variant": "#e8e0e3",
+                        "on-surface-variant": "#48464b",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "secondary": "#605d6a",
+                        "background": "#fff7fa",
+                        "surface-container-highest": "#e8e0e3",
+                        "on-tertiary-fixed-variant": "#57423c",
+                        "on-secondary-container": "#64616e",
+                        "primary-fixed-dim": "#bdc8d2",
+                        "secondary-fixed-dim": "#c9c4d4",
+                        "tertiary-fixed": "#fbdcd3",
+                        "surface-container-high": "#eee6e9",
+                        "on-error": "#ffffff",
+                        "on-background": "#1e1b1d",
+                        "primary": "#556069",
+                        "outline-variant": "#c9c5cc",
+                        "surface-tint": "#556069",
+                        "tertiary-container": "#e6c8bf",
+                        "on-secondary-fixed-variant": "#484552",
+                        "surface": "#fff7fa",
+                        "tertiary": "#705953",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#69524c",
+                        "primary-fixed": "#d9e4ef",
+                        "outline": "#79767c",
+                        "surface-bright": "#fff7fa"
+                    },
+                    fontFamily: {
+                        "headline": ["Epilogue", "sans-serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.75rem", "lg": "1rem", "xl": "1.25rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 0 20px 40px -10px rgba(85, 96, 105, 0.04);
+        }
+        .ticker-animation {
+            display: flex;
+            width: fit-content;
+            animation: scroll 40s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fff7fa]/80 backdrop-blur-xl border-b border-[#556069]/10 shadow-sm shadow-[#556069]/5">
+<nav class="flex justify-between items-center px-8 h-20 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-12">
+<a href="/index.html"><span class="text-2xl font-bold tracking-tighter text-[#556069]">Agamin</span></a>
+<div class="hidden lg:flex items-center gap-8">
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/index.html">Home</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/market.html">Cryptocurrencies</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/exchanges.html">Exchanges</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/nfts.html">NFTs</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069] font-bold border-b-2 border-[#556069] pb-1" href="/portfolio.html">Portfolio</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/learn.html">Learn</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#faf1f4] rounded-lg transition-all duration-300 scale-98 active:scale-95">
+<span class="material-symbols-outlined text-[#556069]">account_balance_wallet</span>
+</button>
+<button class="p-2 hover:bg-[#faf1f4] rounded-lg transition-all duration-300 scale-98 active:scale-95">
+<span class="material-symbols-outlined text-[#556069]">notifications</span>
+</button>
+<button class="p-2 hover:bg-[#faf1f4] rounded-lg transition-all duration-300 scale-98 active:scale-95">
+<span class="material-symbols-outlined text-[#556069]">person</span>
+</button>
+</div>
+</nav>
+</header>
+<!-- Scrolling Ticker -->
+<div class="pt-20 w-full overflow-hidden bg-surface-container-low py-3 border-b border-outline-variant/10">
+<div class="ticker-animation whitespace-nowrap">
+<div class="flex gap-12 px-6">
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">BTC <span class="text-on-surface">$64,231.40</span> <span class="text-emerald-600">+1.24%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">ETH <span class="text-on-surface">$3,452.12</span> <span class="text-rose-600">-0.45%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">SOL <span class="text-on-surface">$142.88</span> <span class="text-emerald-600">+4.12%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">ADA <span class="text-on-surface">$0.45</span> <span class="text-rose-600">-2.10%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">DOT <span class="text-on-surface">$7.21</span> <span class="text-emerald-600">+0.88%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">LINK <span class="text-on-surface">$18.44</span> <span class="text-emerald-600">+5.54%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">MATIC <span class="text-on-surface">$0.68</span> <span class="text-rose-600">-1.15%</span></span>
+</div>
+<div class="flex gap-12 px-6">
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">BTC <span class="text-on-surface">$64,231.40</span> <span class="text-emerald-600">+1.24%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">ETH <span class="text-on-surface">$3,452.12</span> <span class="text-rose-600">-0.45%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">SOL <span class="text-on-surface">$142.88</span> <span class="text-emerald-600">+4.12%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">ADA <span class="text-on-surface">$0.45</span> <span class="text-rose-600">-2.10%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">DOT <span class="text-on-surface">$7.21</span> <span class="text-emerald-600">+0.88%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">LINK <span class="text-on-surface">$18.44</span> <span class="text-emerald-600">+5.54%</span></span>
+<span class="flex items-center gap-2 text-sm font-medium text-tertiary">MATIC <span class="text-on-surface">$0.68</span> <span class="text-rose-600">-1.15%</span></span>
+</div>
+</div>
+</div>
+<main class="pt-12 pb-24 px-8 max-w-7xl mx-auto">
+<!-- Hero Section / Portfolio Summary -->
+<header class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div class="space-y-4">
+<p class="text-tertiary font-label font-bold uppercase tracking-widest text-xs">Total Balance</p>
+<div class="flex items-baseline gap-4">
+<h1 class="text-5xl md:text-7xl font-headline font-extrabold tracking-tighter text-primary">$128,492.30</h1>
+<span class="px-4 py-1.5 bg-secondary-container text-on-secondary-container rounded-lg text-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">arrow_upward</span>
+                        12.4%
+                    </span>
+</div>
+<p class="text-on-surface-variant/60 font-label flex items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-base">history</span>
+                    Last updated 2 minutes ago
+                </p>
+</div>
+<div class="flex gap-4">
+<button class="px-8 py-4 bg-surface-container-highest text-primary font-headline font-bold rounded-xl hover:bg-surface-container-high transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">file_upload</span>
+                    Import CSV
+                </button>
+<button class="px-8 py-4 bg-primary text-on-primary font-headline font-bold rounded-xl hover:translate-y-[-2px] transition-transform flex items-center gap-2 shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined">add</span>
+                    Add Transaction
+                </button>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-16">
+<!-- PnL Chart Area -->
+<div class="md:col-span-8 bg-surface-container-low rounded-xl p-8 editorial-shadow min-h-[440px] flex flex-col">
+<div class="flex justify-between items-center mb-10">
+<h3 class="text-xl font-headline font-bold text-primary">Performance</h3>
+<div class="flex bg-surface-container-high p-1 rounded-lg">
+<button class="px-5 py-1.5 text-xs font-bold rounded-md bg-white text-primary shadow-sm">1W</button>
+<button class="px-5 py-1.5 text-xs font-bold rounded-md text-on-surface-variant hover:bg-white/50 transition-colors">1M</button>
+<button class="px-5 py-1.5 text-xs font-bold rounded-md text-on-surface-variant hover:bg-white/50 transition-colors">1Y</button>
+<button class="px-5 py-1.5 text-xs font-bold rounded-md text-on-surface-variant hover:bg-white/50 transition-colors">ALL</button>
+</div>
+</div>
+<div class="flex-grow flex items-center justify-center">
+<div class="w-full h-full relative overflow-hidden rounded-lg">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 800 200">
+<defs>
+<lineargradient id="chartGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#556069;stop-opacity:0.2"></stop>
+<stop offset="100%" style="stop-color:#556069;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<path class="text-primary/10" d="M0,150 C50,140 100,160 150,130 C200,100 250,110 300,80 C350,50 400,90 450,70 C500,50 550,60 600,40 C650,20 700,45 800,30 V200 H0 Z" fill="url(#chartGradient)"></path>
+<path class="text-primary/40" d="M0,150 C50,140 100,160 150,130 C200,100 250,110 300,80 C350,50 400,90 450,70 C500,50 550,60 600,40 C650,20 700,45 800,30" fill="none" stroke="currentColor" stroke-width="3"></path>
+</svg>
+<div class="absolute top-1/4 left-1/2 -translate-x-1/2 bg-white px-6 py-3 rounded-xl shadow-xl border border-outline-variant/10 text-center scale-90 md:scale-100">
+<p class="text-[10px] font-bold text-tertiary uppercase tracking-widest mb-1">October 24</p>
+<p class="text-xl font-headline font-black text-primary">$132,042</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Allocation Chart -->
+<div class="md:col-span-4 bg-surface-container-highest rounded-xl p-8 editorial-shadow flex flex-col">
+<h3 class="text-xl font-headline font-bold text-primary mb-10">Allocation</h3>
+<div class="relative flex-grow flex items-center justify-center py-6">
+<div class="relative w-52 h-52 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-primary/5" cx="104" cy="104" fill="transparent" r="85" stroke="currentColor" stroke-width="20"></circle>
+<circle class="text-primary" cx="104" cy="104" fill="transparent" r="85" stroke="currentColor" stroke-dasharray="534" stroke-dashoffset="192" stroke-linecap="round" stroke-width="20"></circle>
+<circle class="text-tertiary-container" cx="104" cy="104" fill="transparent" r="85" stroke="currentColor" stroke-dasharray="534" stroke-dashoffset="411" stroke-linecap="round" stroke-width="20"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-xs font-bold text-tertiary uppercase tracking-widest">BTC</span>
+<span class="text-3xl font-black text-primary">64%</span>
+</div>
+</div>
+</div>
+<div class="mt-10 space-y-5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-2.5 h-2.5 rounded-sm bg-primary"></div>
+<span class="text-sm font-medium text-on-surface-variant"><a href="/bitcoin.html" class="hover:underline">Bitcoin</a></span>
+</div>
+<span class="text-sm font-bold text-primary">64.2%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-2.5 h-2.5 rounded-sm bg-tertiary-container"></div>
+<span class="text-sm font-medium text-on-surface-variant">Ethereum</span>
+</div>
+<span class="text-sm font-bold text-primary">22.8%</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-2.5 h-2.5 rounded-sm bg-outline-variant"></div>
+<span class="text-sm font-medium text-on-surface-variant">Others</span>
+</div>
+<span class="text-sm font-bold text-primary">13.0%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Asset Table Section -->
+<section class="bg-white rounded-xl overflow-hidden editorial-shadow">
+<div class="px-10 py-8 border-b border-surface-container flex items-center justify-between">
+<h3 class="text-2xl font-headline font-bold text-primary">Your Assets</h3>
+<div class="flex gap-4">
+<button class="p-2.5 hover:bg-surface-container rounded-lg transition-colors material-symbols-outlined text-on-surface-variant">filter_list</button>
+<button class="p-2.5 hover:bg-surface-container rounded-lg transition-colors material-symbols-outlined text-on-surface-variant">search</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50 text-tertiary uppercase text-[10px] font-black tracking-widest">
+<th class="px-10 py-6">Coin</th>
+<th class="px-10 py-6 text-right">Amount</th>
+<th class="px-10 py-6 text-right">Avg Buy</th>
+<th class="px-10 py-6 text-right">Current Price</th>
+<th class="px-10 py-6 text-right">Value</th>
+<th class="px-10 py-6 text-right">PnL%</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container/30">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-10 py-7">
+<div class="flex items-center gap-5">
+<div class="w-11 h-11 rounded-lg bg-surface-container-highest flex items-center justify-center p-2.5 overflow-hidden">
+<img alt="BTC" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADzlb4aQfJic3mwk0NAl6IXPVm61zNhoJCbscQ4CgLMyZIoiAQLg33pSZ-eGckELUD5KW4dH_U6Ak6IbZXqpVzoqvQPoEEHxg4D4-Ucvo8ojc1Gk3icyXxdWmC2H9XU0d4J6X96nG6QX6Gopr5GdM3AGcYZC665xZsltN_jN7nUp6yoog8gFwQVH8uJpNskdtn6mRpoon1DnkVGlLXB0x5K_npyYWlaR_dJufbGzwtk9S3SlyqcOI2Iz8qOxu_wCVTBkTR9eu5dWEZ"/>
+</div>
+<div>
+<p class="font-headline font-bold text-primary"><a href="/bitcoin.html" class="hover:underline">Bitcoin</a></p>
+<p class="text-[11px] text-tertiary font-bold tracking-wider uppercase">BTC</p>
+</div>
+</div>
+</td>
+<td class="px-10 py-7 text-right font-bold text-on-surface">1.2480</td>
+<td class="px-10 py-7 text-right font-medium text-on-surface-variant">$42,105.00</td>
+<td class="px-10 py-7 text-right font-medium text-on-surface-variant">$67,290.45</td>
+<td class="px-10 py-7 text-right font-bold text-primary">$83,978.48</td>
+<td class="px-10 py-7 text-right">
+<span class="text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-lg text-sm">+59.8%</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-10 py-7">
+<div class="flex items-center gap-5">
+<div class="w-11 h-11 rounded-lg bg-surface-container-highest flex items-center justify-center p-2.5 overflow-hidden">
+<img alt="ETH" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5zPpmXM16LXqNgi4U7DQyHrVR2R2YmsHr_dxi8UAxagyHNC3t2ZmD9bpuN_PETuXUxDeDDv_CV8iDR-qrfOSliITj1A_apU_w7iQsT3kXK_zMraQuY1m9fLd70qEZAOLmDOcjeAH1NA-1SnZF7qsqKKC4v_YZ9EwsglQgnRaUW5rJFD-0Dkj-X9QHNIzRQoxZd6iQkI-UX56gdPK1hjJYyErbe6CM0uT7YMh1uOGu1PBWtjFDbSK_W00wKPvtFYAwSG0klFzNrFND"/>
+</div>
+<div>
+<p class="font-headline font-bold text-primary">Ethereum</p>
+<p class="text-[11px] text-tertiary font-bold tracking-wider uppercase">ETH</p>
+</div>
+</div>
+</td>
+<td class="px-10 py-7 text-right font-bold text-on-surface">8.5000</td>
+<td class="px-10 py-7 text-right font-medium text-on-surface-variant">$2,840.12</td>
+<td class="px-10 py-7 text-right font-medium text-on-surface-variant">$3,450.10</td>
+<td class="px-10 py-7 text-right font-bold text-primary">$29,325.85</td>
+<td class="px-10 py-7 text-right">
+<span class="text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-lg text-sm">+21.4%</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="px-10 py-7">
+<div class="flex items-center gap-5">
+<div class="w-11 h-11 rounded-lg bg-surface-container-highest flex items-center justify-center p-2.5 overflow-hidden">
+<img alt="SOL" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2kBkthoBt_bGppJj4Y-aYHtHGNPwqwQZboRhkURKdwksVA0RmWX5SOZ7_kNG_426Quivf0uR6kqTZm51VCvp_HT5zBr_n2DPvoAh5TIeCU34sSzeevvPR9xelRo0wRe0BnzGLjDG--c3xQVEZTKl70v6S_W8lcmqLj_R0JGLgye4mXwuDqnU5anTtXC0mYGsC7tNSTQICstM1AfLYJp6szN-sTCGpr6ioeVjhsBH9l6KLK_D6wBYKPSDfc0rTO5_KBIoCJMn_dIbZ"/>
+</div>
+<div>
+<p class="font-headline font-bold text-primary">Solana</p>
+<p class="text-[11px] text-tertiary font-bold tracking-wider uppercase">SOL</p>
+</div>
+</div>
+</td>
+<td class="px-10 py-7 text-right font-bold text-on-surface">112.45</td>
+<td class="px-10 py-7 text-right font-medium text-on-surface-variant">$164.20</td>
+<td class="px-10 py-7 text-right font-medium text-on-surface-variant">$142.15</td>
+<td class="px-10 py-7 text-right font-bold text-primary">$15,984.77</td>
+<td class="px-10 py-7 text-right">
+<span class="text-error font-bold bg-error-container/30 px-3 py-1 rounded-lg text-sm">-13.4%</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-8 bg-surface-container-low/20 text-center">
+<button class="text-sm font-bold text-primary hover:text-tertiary transition-colors">View All 12 Assets</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#faf1f4] w-full py-16 px-12 rounded-t-xl">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
+<div class="space-y-6">
+<a href="/index.html"><span class="text-2xl font-bold tracking-tighter text-[#556069]">Agamin</span></a>
+<p class="font-['Epilogue'] text-sm leading-relaxed text-[#705953]">The Ethereal Vault for modern finance. Secure, serene, and sophisticated.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center hover:bg-primary-container transition-colors group" href="#">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">public</span>
+</a>
+<a class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center hover:bg-primary-container transition-colors group" href="#">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">share</span>
+</a>
+</div>
+</div>
+<div class="space-y-5">
+<h4 class="font-bold text-[#556069] text-sm uppercase tracking-widest">Product</h4>
+<ul class="space-y-3">
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="/market.html">Markets</a></li>
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="/portfolio.html">Portfolio Tracker</a></li>
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="#">Mobile App</a></li>
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="#">API Services</a></li>
+</ul>
+</div>
+<div class="space-y-5">
+<h4 class="font-bold text-[#556069] text-sm uppercase tracking-widest">Resources</h4>
+<ul class="space-y-3">
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="#">Help Center</a></li>
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="#">Glossary</a></li>
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="#">Methodology</a></li>
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="#">Newsletter</a></li>
+</ul>
+</div>
+<div class="space-y-5">
+<h4 class="font-bold text-[#556069] text-sm uppercase tracking-widest">Company</h4>
+<ul class="space-y-3">
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="#">Privacy Policy</a></li>
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="#">Terms of Service</a></li>
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="#">Security</a></li>
+<li><a class="text-[#705953]/70 hover:text-[#556069] transition-all text-sm inline-block" href="#">Contact Us</a></li>
+</ul>
+</div>
+</div>
+<div class="mt-16 pt-8 border-t border-outline-variant/10 max-w-7xl mx-auto text-center">
+<p class="text-[#705953]/50 text-xs">© 2024 Agamin. Built for the Ethereal Vault.</p>
+</div>
+</footer>
+</body></html>

@@ -117,11 +117,16 @@
 <div class="hidden lg:flex items-center gap-8">
 <a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/index.html">Home</a>
 <a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069] font-bold border-b-2 border-[#556069] pb-1" href="/market.html">Cryptocurrencies</a>
-<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/prediction.html">Prediction</a>
-<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/about.html">About Us</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/exchanges.html">Exchanges</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/nfts.html">NFTs</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/portfolio.html">Portfolio</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/learn.html">Learn</a>
 </div>
 </div>
 <div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#faf1f4] rounded-full transition-all duration-300 scale-98 active:scale-95">
+<span class="material-symbols-outlined text-[#556069]">account_balance_wallet</span>
+</button>
 <button class="p-2 hover:bg-[#faf1f4] rounded-full transition-all duration-300 scale-98 active:scale-95">
 <span class="material-symbols-outlined text-[#556069]">notifications</span>
 </button>
@@ -134,9 +139,9 @@
 <main class="pt-32 pb-20 px-8 max-w-screen-2xl mx-auto">
 <!-- Hero Section -->
 <header class="mb-12">
-<h1 class="font-headline text-5xl font-extrabold tracking-tight text-primary mb-4">Top 12 <a href="/market.html" class="hover:underline">Ecosystem</a></h1>
+<h1 class="font-headline text-5xl font-extrabold tracking-tight text-primary mb-4">Market <a href="/ecosystem.html" class="hover:underline">Ecosystem</a></h1>
 <p class="text-tertiary text-lg max-w-2xl leading-relaxed">
-                Explore the ethereal movements of our curated digital vault. Real-time insights for the discerning investor.
+                Explore the ethereal movements of the digital vault. Real-time insights curated with tranquility for the discerning investor.
             </p>
 </header>
 <!-- Filter Tabs -->
@@ -180,7 +185,7 @@
 <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
 <img alt="BTC" class="w-6 h-6" data-alt="Official minimalist bitcoin logo in orange and white circles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABomuPNnm15bMI_HaX4EsSFqd-0q-mGqiehtZmK8RWUX90gSctjHopHof2m14-gpeUADmAhoD9LHJMCRkKXod1rlMAyOYxryZocbhF6iutNgCkX93q1bxSGdp54FGDbeYtd1QrtNFpiG1bkHo_G2pzmxJ-DEm5vr8U-1yBAHZsqwaQs9FAN83RVGBEs-xuW--HIUa-boLh2L_Ojm0N0Dbgdex2gXWQ8Y-Lk1UWva1kdvTmN-YFyhEtY-MA9_VtHen6v6btwT8PpVPh"/>
 </div>
-<span class="font-bold text-primary"><a href="/prediction.html" class="hover:underline">Bitcoin</a> <span class="text-tertiary font-normal ml-1">BTC</span></span>
+<span class="font-bold text-primary"><a href="/bitcoin.html" class="hover:underline">Bitcoin</a> <span class="text-tertiary font-normal ml-1">BTC</span></span>
 </div>
 </td>
 <td class="py-5 px-4 font-semibold">$64,231.50</td>
@@ -296,10 +301,27 @@
 </tbody>
 </table>
 </div>
+<!-- Table Footer / Pagination -->
 <div class="p-8 border-t border-surface-container-high flex flex-col md:flex-row items-center justify-between gap-6">
 <div class="text-tertiary text-sm">
-                    Showing <span class="font-bold text-primary">12</span> of 12 tracked cryptocurrencies
+                    Showing <span class="font-bold text-primary">1 - 20</span> of 1,245 cryptocurrencies
                 </div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-primary">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-on-primary font-bold">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-primary">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-primary">3</button>
+<span class="px-2 text-tertiary">...</span>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-primary">62</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-low transition-colors text-primary">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+<button class="px-8 py-3 bg-primary text-on-primary rounded-xl font-bold tracking-tight shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95">
+                    Load Next 100
+                </button>
 </div>
 </div>
 </main>
@@ -311,18 +333,24 @@
 <p class="font-['Epilogue'] body-lg leading-relaxed text-[#705953]">© 2024 Agamin. Built for the Ethereal Vault.</p>
 </div>
 <div class="space-y-4">
-<h4 class="font-bold text-[#556069] mb-6">Platform</h4>
+<h4 class="font-bold text-[#556069] mb-6">Product</h4>
 <nav class="flex flex-col gap-3">
-<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="/index.html">Home</a>
-<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="/market.html">Cryptocurrencies</a>
-<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="/prediction.html">Prediction</a>
-<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="/about.html">About Us</a>
+<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="/market.html">Markets</a>
+<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="#">Pricing</a>
+<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="/exchanges.html">Exchanges</a>
+</nav>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-[#556069] mb-6">Resources</h4>
+<nav class="flex flex-col gap-3">
+<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="#">Help Center</a>
+<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="#">API Docs</a>
+<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="#">Security</a>
 </nav>
 </div>
 <div class="space-y-4">
 <h4 class="font-bold text-[#556069] mb-6">Legal</h4>
 <nav class="flex flex-col gap-3">
-<a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="/about.html">About Us</a>
 <a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="#">Privacy Policy</a>
 <a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="#">Terms of Service</a>
 <a class="text-[#705953]/70 hover:text-[#556069] transition-transform hover:translate-x-1 duration-200" href="#">Contact Us</a>

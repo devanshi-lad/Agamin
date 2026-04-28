@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-container": "#e2dded",
+              "surface-dim": "#e0d8db",
+              "error-container": "#ffdad6",
+              "inverse-primary": "#bdc8d2",
+              "inverse-on-surface": "#f7eff2",
+              "surface-container": "#f4ecef",
+              "tertiary-fixed-dim": "#dec0b8",
+              "on-secondary": "#ffffff",
+              "error": "#ba1a1a",
+              "primary-container": "#c5d0db",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed": "#1c1a25",
+              "surface-container-low": "#faf1f4",
+              "on-primary-fixed-variant": "#3e4851",
+              "on-surface": "#1e1b1d",
+              "inverse-surface": "#332f32",
+              "on-tertiary-fixed": "#281713",
+              "secondary-fixed": "#e5e0f0",
+              "on-primary-fixed": "#131d25",
+              "on-primary-container": "#4f5962",
+              "surface-variant": "#e8e0e3",
+              "on-surface-variant": "#48464b",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#ffffff",
+              "secondary": "#605d6a",
+              "background": "#fff7fa",
+              "surface-container-highest": "#e8e0e3",
+              "on-tertiary-fixed-variant": "#57423c",
+              "on-secondary-container": "#64616e",
+              "primary-fixed-dim": "#bdc8d2",
+              "secondary-fixed-dim": "#c9c4d4",
+              "tertiary-fixed": "#fbdcd3",
+              "surface-container-high": "#eee6e9",
+              "on-error": "#ffffff",
+              "on-background": "#1e1b1d",
+              "primary": "#556069",
+              "outline-variant": "#c9c5cc",
+              "surface-tint": "#556069",
+              "tertiary-container": "#e6c8bf",
+              "on-secondary-fixed-variant": "#484552",
+              "surface": "#fff7fa",
+              "tertiary": "#705953",
+              "on-error-container": "#93000a",
+              "on-tertiary-container": "#69524c",
+              "primary-fixed": "#d9e4ef",
+              "outline": "#79767c",
+              "surface-bright": "#fff7fa"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "1.5rem", "xl": "2rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mesh-gradient-bg {
+            background-color: #fff7fa;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,82%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,10%,40%,0.15) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(11,15%,85%,1) 0, transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar (Exact from Source) -->
+<header class="fixed top-0 w-full z-50 bg-[#fff7fa]/80 backdrop-blur-xl border-b border-[#556069]/10 shadow-sm shadow-[#556069]/5">
+<nav class="flex justify-between items-center px-8 h-20 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-12">
+<a href="/index.html"><span class="text-2xl font-bold tracking-tighter text-[#556069]">Agamin</span></a>
+<div class="hidden lg:flex items-center gap-8">
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/index.html">Home</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/market.html">Cryptocurrencies</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069] font-bold border-b-2 border-[#556069] pb-1" href="/exchanges.html">Exchanges</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/nfts.html">NFTs</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/portfolio.html">Portfolio</a>
+<a class="font-['Epilogue'] tracking-tight headline-sm text-[#556069]/60 hover:text-[#556069] transition-colors" href="/learn.html">Learn</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#faf1f4] rounded-xl transition-all duration-300 scale-98 active:scale-95">
+<span class="material-symbols-outlined text-[#556069]">account_balance_wallet</span>
+</button>
+<button class="p-2 hover:bg-[#faf1f4] rounded-xl transition-all duration-300 scale-98 active:scale-95">
+<span class="material-symbols-outlined text-[#556069]">notifications</span>
+</button>
+<button class="p-2 hover:bg-[#faf1f4] rounded-xl transition-all duration-300 scale-98 active:scale-95 overflow-hidden">
+<img alt="User profile" class="w-8 h-8 rounded-lg object-cover" data-alt="close-up portrait of a woman with a serene expression and soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_obzL2LHAg7SIGP3ekH2s8T22twfnreIsi0JaPSL3Kmr_vWWkpnWcAvUrgg69uDFeDH4u_C4ezx2arABPVNNIULnPUzuZFXlvShjiq-bnEVEQWA1IbABeIjegQeroc4wEc0VvDKbpYAxZ4rbQi1pTrss1pTGO_t8wwqTJUSwBSxUmuI2QpJz0andBCVxg1kmwzKpjiQ_KE23Eac5MO5ImVUHtIj11LmUP0TIgXEb4mFMnpG-fTDwFDJc16eQzhyzLts8Wv_g6MXwY"/>
+</button>
+</div>
+</nav>
+</header>
+<main class="pt-32 pb-24 px-8 max-w-7xl mx-auto">
+<!-- Hero Header -->
+<header class="mb-16">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+<div class="max-w-2xl">
+<span class="text-tertiary font-semibold tracking-widest uppercase text-xs mb-4 block">Market Infrastructure</span>
+<h1 class="text-5xl md:text-7xl font-headline font-extrabold text-primary tracking-tighter leading-none mb-6">Global Exchanges</h1>
+<p class="text-on-surface-variant text-lg leading-relaxed font-body">
+                    Navigate the world's most trusted digital asset gateways. We curate exchanges based on liquidity, security protocols, and verified volume to ensure your ethereal journey remains secure.
+                </p>
+</div>
+<div class="flex gap-2 bg-surface-container-low p-1.5 rounded-2xl">
+<button class="px-8 py-3 rounded-xl bg-primary text-on-primary font-bold shadow-md transition-all active:scale-95">
+                    Centralized
+                </button>
+<button class="px-8 py-3 rounded-xl text-on-surface-variant font-bold hover:bg-surface-container-high transition-colors active:scale-95">
+                    Decentralized
+                </button>
+</div>
+</div>
+</header>
+<!-- Stats Overview Bento (Medium rounding restyle) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+<div class="bg-surface-container-low p-8 rounded-2xl border border-outline-variant/10 flex flex-col justify-between h-48 transition-transform hover:scale-[1.02]">
+<span class="text-tertiary text-xs font-bold uppercase tracking-widest">Total 24h Volume</span>
+<div>
+<span class="text-4xl font-headline font-bold text-primary">$64.2B</span>
+<div class="text-error text-xs mt-2 flex items-center gap-1 font-bold">
+<span class="material-symbols-outlined text-sm">south_east</span> -4.2% from yesterday
+                </div>
+</div>
+</div>
+<div class="bg-primary-container p-8 rounded-2xl flex flex-col justify-between h-48 transition-transform hover:scale-[1.02]">
+<span class="text-on-primary-container text-xs font-bold uppercase tracking-widest">Active Markets</span>
+<div>
+<span class="text-4xl font-headline font-bold text-on-primary-container">12,482</span>
+<div class="text-on-primary-container/60 text-xs mt-2 font-medium">Across 428 exchanges</div>
+</div>
+</div>
+<div class="bg-surface-container-highest p-8 rounded-2xl border border-outline-variant/10 flex flex-col justify-between h-48 transition-transform hover:scale-[1.02]">
+<span class="text-tertiary text-xs font-bold uppercase tracking-widest">Top Performer</span>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">hub</span>
+</div>
+<div>
+<span class="text-xl font-bold text-primary block font-headline">EtherBridge</span>
+<span class="text-xs text-on-surface-variant font-medium">+12.4% Vol Growth</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Exchange Table Container -->
+<div class="bg-surface-container-low rounded-2xl border border-outline-variant/10 p-4 md:p-8 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/20">
+<th class="py-6 px-8 text-[10px] font-bold text-tertiary uppercase tracking-widest">Rank</th>
+<th class="py-6 px-4 text-[10px] font-bold text-tertiary uppercase tracking-widest">Name</th>
+<th class="py-6 px-4 text-[10px] font-bold text-tertiary uppercase tracking-widest text-center">Trust Score</th>
+<th class="py-6 px-4 text-[10px] font-bold text-tertiary uppercase tracking-widest text-right">24h Volume</th>
+<th class="py-6 px-4 text-[10px] font-bold text-tertiary uppercase tracking-widest text-right">Weekly Visits</th>
+<th class="py-6 px-4 text-[10px] font-bold text-tertiary uppercase tracking-widest text-right">Markets</th>
+<th class="py-6 px-8 text-[10px] font-bold text-tertiary uppercase tracking-widest text-right">Coins</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-high transition-colors cursor-pointer group">
+<td class="py-8 px-8 font-headline font-bold text-primary text-lg">01</td>
+<td class="py-8 px-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-white border border-outline-variant/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl">token</span>
+</div>
+<div>
+<span class="font-bold text-primary block">Binance</span>
+<span class="text-xs text-on-surface-variant font-medium">Centralized</span>
+</div>
+</div>
+</td>
+<td class="py-8 px-4">
+<div class="flex justify-center gap-1.5">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+</td>
+<td class="py-8 px-4 text-right font-semibold text-primary">$12,482,901,204</td>
+<td class="py-8 px-4 text-right text-on-surface-variant font-medium">14,204,119</td>
+<td class="py-8 px-4 text-right text-on-surface-variant font-medium">1,482</td>
+<td class="py-8 px-8 text-right text-on-surface-variant font-medium">384</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-high transition-colors cursor-pointer group">
+<td class="py-8 px-8 font-headline font-bold text-primary text-lg">02</td>
+<td class="py-8 px-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-white border border-outline-variant/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl">account_balance</span>
+</div>
+<div>
+<span class="font-bold text-primary block">Coinbase</span>
+<span class="text-xs text-on-surface-variant font-medium">Centralized</span>
+</div>
+</div>
+</td>
+<td class="py-8 px-4">
+<div class="flex justify-center gap-1.5">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary/20"></div>
+</div>
+</td>
+<td class="py-8 px-4 text-right font-semibold text-primary">$2,109,332,104</td>
+<td class="py-8 px-4 text-right text-on-surface-variant font-medium">2,881,042</td>
+<td class="py-8 px-4 text-right text-on-surface-variant font-medium">420</td>
+<td class="py-8 px-8 text-right text-on-surface-variant font-medium">242</td>
+</tr>
+<!-- Row 3 (DEX) -->
+<tr class="hover:bg-surface-container-high transition-colors cursor-pointer group">
+<td class="py-8 px-8 font-headline font-bold text-primary text-lg">03</td>
+<td class="py-8 px-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-secondary-container/50 border border-outline-variant/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl">diversity_3</span>
+</div>
+<div>
+<span class="font-bold text-primary block">Uniswap V3</span>
+<span class="text-xs text-on-surface-variant font-medium">Decentralized</span>
+</div>
+</div>
+</td>
+<td class="py-8 px-4">
+<div class="flex justify-center gap-1.5">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+</div>
+</td>
+<td class="py-8 px-4 text-right font-semibold text-primary">$892,114,203</td>
+<td class="py-8 px-4 text-right text-on-surface-variant font-medium">1,204,551</td>
+<td class="py-8 px-4 text-right text-on-surface-variant font-medium">8,291</td>
+<td class="py-8 px-8 text-right text-on-surface-variant font-medium">4,112</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-high transition-colors cursor-pointer group">
+<td class="py-8 px-8 font-headline font-bold text-primary text-lg">04</td>
+<td class="py-8 px-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-white border border-outline-variant/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl">diamond</span>
+</div>
+<div>
+<span class="font-bold text-primary block">Kraken</span>
+<span class="text-xs text-on-surface-variant font-medium">Centralized</span>
+</div>
+</div>
+</td>
+<td class="py-8 px-4">
+<div class="flex justify-center gap-1.5">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-secondary/20"></div>
+</div>
+</td>
+<td class="py-8 px-4 text-right font-semibold text-primary">$642,881,004</td>
+<td class="py-8 px-4 text-right text-on-surface-variant font-medium">982,104</td>
+<td class="py-8 px-4 text-right text-on-surface-variant font-medium">612</td>
+<td class="py-8 px-8 text-right text-on-surface-variant font-medium">182</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="py-6 px-8 border-t border-outline-variant/10 flex justify-center mt-4">
+<button class="text-primary font-bold text-sm flex items-center gap-2 hover:bg-surface-container-high px-6 py-2 rounded-xl transition-all active:scale-95">
+                Load More Exchanges <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Footer (Consistent with medium rounding) -->
+<footer class="bg-surface-container-low w-full py-16 px-12 rounded-t-3xl border-t border-outline-variant/10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
+<div class="space-y-6">
+<span class="text-xl font-bold text-primary">Agamin</span>
+<p class="font-body text-tertiary leading-relaxed">The Ethereal Vault for modern finance. Secure, serene, and sophisticated.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center hover:bg-primary-container transition-colors group" href="#">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">public</span>
+</a>
+<a class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center hover:bg-primary-container transition-colors group" href="#">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">share</span>
+</a>
+</div>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-primary">Product</h4>
+<ul class="space-y-2">
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="/market.html">Markets</a></li>
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="/portfolio.html">Portfolio Tracker</a></li>
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="#">Mobile App</a></li>
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="#">API Services</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-primary">Resources</h4>
+<ul class="space-y-2">
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="#">Help Center</a></li>
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="#">Glossary</a></li>
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="#">Methodology</a></li>
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="#">Newsletter</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-primary">Company</h4>
+<ul class="space-y-2">
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="#">Privacy Policy</a></li>
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="#">Terms of Service</a></li>
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="#">Security</a></li>
+<li><a class="text-tertiary/70 hover:text-primary hover:translate-x-1 transition-all inline-block text-sm" href="#">Contact Us</a></li>
+</ul>
+</div>
+</div>
+<div class="mt-16 pt-8 border-t border-outline-variant/10 max-w-7xl mx-auto text-center">
+<p class="text-tertiary/50 text-sm">© 2024 Agamin. Built for the Ethereal Vault.</p>
+</div>
+</footer>
+</body></html>
