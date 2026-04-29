@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, ArrowUpRight, ArrowDownRight, RefreshCw, WifiOff, Search } from 'lucide-react';
+import { Star, ArrowUpRight, ArrowDownRight, RefreshCw, WifiOff, Search, Cloud, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
 const CG_API_KEY = 'CG-XgRkwptpUH4LFa6Mub8chHXH';
 const REFRESH_INTERVAL = 10000;
@@ -23,9 +24,6 @@ const formatLargeNum = (num) => {
 };
 
 // ── Pure SVG sparkline ───────────────────────────────────────────────────────
-// ResponsiveContainer from recharts fails in table cells because it cannot
-// measure zero-height containers. A hand-drawn SVG with a fixed viewBox works
-// perfectly everywhere and has zero extra dependencies.
 const SparklineChart = ({ prices, isPositive }) => {
   const W = 120;
   const H = 40;
@@ -43,7 +41,6 @@ const SparklineChart = ({ prices, isPositive }) => {
     );
   }
 
-  // Downsample to ~50 points for clean rendering
   const step = Math.max(1, Math.floor(prices.length / 50));
   const pts = prices.filter((_, i) => i % step === 0);
 
@@ -79,7 +76,6 @@ const SparklineChart = ({ prices, isPositive }) => {
   );
 };
 
-// ── Blinking live indicator ──────────────────────────────────────────────────
 const LiveDot = () => (
   <span className="relative flex h-2.5 w-2.5">
     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -89,7 +85,6 @@ const LiveDot = () => (
 
 const FILTERS = ['All', 'DeFi', 'Layer 1', 'Layer 2', 'Metaverse', 'Meme', 'Stablecoins'];
 
-// ── Market page ──────────────────────────────────────────────────────────────
 const Market = () => {
   const [cryptos, setCryptos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -98,12 +93,14 @@ const Market = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [online, setOnline] = useState(true);
   const [watchlist, setWatchlist] = useState(new Set());
-  const [username, setUsername] = useState("");
   const [activeFilter, setActiveFilter] = useState('All');
   const [search, setSearch] = useState('');
   const [countdown, setCountdown] = useState(10);
+  const [syncing, setSyncing] = useState(false);
   const intervalRef = useRef(null);
   const countdownRef = useRef(null);
+
+  const { user, token, BACKEND_URL } = useAuth();
 
   const fetchData = useCallback(async (isManual = false) => {
     if (isManual) setIsRefreshing(true);
@@ -128,6 +125,13 @@ const Market = () => {
     }
   }, []);
 
+  // Sync user's watchlist from DB on load
+  useEffect(() => {
+    if (user && user.bookmarks) {
+      setWatchlist(new Set(user.bookmarks));
+    }
+  }, [user]);
+
   useEffect(() => {
     fetchData();
     intervalRef.current = setInterval(() => fetchData(), REFRESH_INTERVAL);
@@ -150,21 +154,29 @@ const Market = () => {
   };
 
   const saveToCloud = async () => {
-    if (!username) return alert("Please enter a username first!");
-    const BACKEND_URL = "https://agamin-backend.onrender.com";
+    if (!user) return alert("Please login first to sync your watchlist!");
+    setSyncing(true);
 
     try {
       const response = await fetch(`${BACKEND_URL}/api/save`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, bookmarks: Array.from(watchlist), alerts: [] })
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ bookmarks: Array.from(watchlist), alerts: [] })
       });
 
-      if (response.ok) alert("✅ Success! Data synced to Cloud MongoDB.");
-      else alert("❌ Sync failed. Check if the terminal is running 'node server.js'");
+      if (response.ok) {
+        alert("✅ Success! Watchlist synced to your Cloud Account.");
+      } else {
+        alert("❌ Sync failed. Session might have expired.");
+      }
     } catch (error) {
       console.error(error);
       alert("Error: Could not connect to backend server.");
+    } finally {
+      setSyncing(false);
     }
   };
 
@@ -216,6 +228,53 @@ const Market = () => {
         </div>
       </div>
 
+      {/* Cloud Sync Section - Only visible when logged in */}
+      <AnimatePresence>
+        {user && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="bg-blue-600 p-6 rounded-3xl mb-8 shadow-xl shadow-blue-200 border border-blue-400 flex flex-col md:flex-row justify-between items-center gap-4 overflow-hidden"
+          >
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
+                <Cloud className="text-white" size={24} />
+              </div>
+              <div>
+                <h3 className="text-white font-bold text-lg">Cloud Watchlist Sync</h3>
+                <p className="text-blue-100 text-sm">Saving to account: <span className="font-bold underline">{user.username}</span></p>
+              </div>
+            </div>
+            
+            <button 
+              onClick={saveToCloud}
+              disabled={syncing}
+              className="px-8 py-3 bg-white text-blue-600 rounded-2xl font-bold text-sm hover:bg-blue-50 transition-all flex items-center gap-2 shadow-lg disabled:opacity-70"
+            >
+              {syncing ? <Loader2 className="animate-spin" size={18} /> : "☁️ Sync to Cloud Now"}
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {!user && (
+        <div className="bg-amber-50 p-6 rounded-3xl mb-8 border border-amber-200 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-amber-100 rounded-2xl">
+              <User className="text-amber-600" size={24} />
+            </div>
+            <div>
+              <h3 className="text-amber-900 font-bold">Sync disabled</h3>
+              <p className="text-amber-700/70 text-sm">Login to save your watchlist across devices.</p>
+            </div>
+          </div>
+          <Link to="/login" className="px-6 py-2.5 bg-amber-600 text-white rounded-xl font-bold text-sm hover:bg-amber-700 transition-all shadow-md">
+            Login to Sync
+          </Link>
+        </div>
+      )}
+
       {/* Search + Filters */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="relative max-w-sm w-full">
@@ -243,24 +302,6 @@ const Market = () => {
             </button>
           ))}
         </div>
-      </div>
-
-      {/* CLOUD SYNC SECTION */}
-      <div className="bg-[#e3f2fd] p-6 rounded-2xl mb-8 shadow-md border-2 border-[#2196f3] flex flex-wrap gap-4 items-center">
-        <h3 className="m-0 text-[#0d47a1] font-bold">Database Sync:</h3>
-        <input 
-          type="text" 
-          placeholder="Type Username Here..." 
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="px-4 py-2 border border-[#90caf9] rounded-xl w-64 text-sm outline-none focus:ring-2 focus:ring-[#2196f3]"
-        />
-        <button 
-          onClick={saveToCloud}
-          className="px-6 py-2.5 bg-[#1976d2] text-white rounded-xl cursor-pointer font-bold text-sm hover:bg-[#1565c0] transition-colors"
-        >
-          ☁️ Sync to Cloud MongoDB
-        </button>
       </div>
 
       {/* Error banner */}

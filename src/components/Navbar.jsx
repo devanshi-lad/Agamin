@@ -1,9 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Bell, User, Search } from 'lucide-react';
+import { Bell, User, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../AuthContext';
 
 const Navbar = () => {
   const location = useLocation();
+  const { user, logout } = useAuth();
   
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -37,9 +39,37 @@ const Navbar = () => {
           <button className="p-2 hover:bg-[#faf1f4] rounded-full transition-all duration-300 hover:scale-110 active:scale-95">
             <Bell size={20} className="text-[#556069]" />
           </button>
-          <button className="p-2 hover:bg-[#faf1f4] rounded-full transition-all duration-300 hover:scale-110 active:scale-95">
-            <User size={20} className="text-[#556069]" />
-          </button>
+          
+          {user ? (
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/50 rounded-full border border-gray-100">
+                <User size={16} className="text-[#556069]" />
+                <span className="text-sm font-bold text-[#556069]">{user.username}</span>
+              </div>
+              <button 
+                onClick={logout}
+                className="p-2 hover:bg-rose-50 text-rose-500 rounded-full transition-all duration-300 hover:scale-110 active:scale-95"
+                title="Logout"
+              >
+                <LogOut size={20} />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link 
+                to="/login" 
+                className="px-5 py-2 text-sm font-bold text-[#556069] hover:bg-[#faf1f4] rounded-full transition-all"
+              >
+                Login
+              </Link>
+              <Link 
+                to="/signup" 
+                className="px-5 py-2 text-sm font-bold bg-[#556069] text-white rounded-full hover:shadow-lg hover:shadow-[#556069]/20 transition-all"
+              >
+                Join Now
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
     </header>

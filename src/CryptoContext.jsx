@@ -1,11 +1,24 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "./AuthContext";
 
 const Crypto = createContext();
 
 const CryptoContext = ({ children }) => {
+  const { user } = useAuth();
   const [coins, setCoins] = useState([]);
   const [watchlist, setWatchlist] = useState([]); // Bookmarks
   const [alerts, setAlerts] = useState([]); // Thresholds
+
+  // Sync with AuthContext user data when user logs in
+  useEffect(() => {
+    if (user) {
+      setWatchlist(user.bookmarks || []);
+      setAlerts(user.alerts || []);
+    } else {
+      setWatchlist([]);
+      setAlerts([]);
+    }
+  }, [user]);
 
   const fetchCoins = async () => {
     try {
