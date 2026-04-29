@@ -105,8 +105,9 @@ const Market = () => {
   const fetchData = useCallback(async (isManual = false) => {
     if (isManual) setIsRefreshing(true);
     try {
+      const ids = "aave,cardano,avalanche-2,binancecoin,bitcoin,polkadot,ethereum,litecoin,pepe,matic-network,shiba-inu,solana,sui,tron,uniswap,ripple";
       const res = await fetch(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=true&price_change_percentage=1h%2C24h%2C7d`,
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&sparkline=true&price_change_percentage=1h%2C24h%2C7d`,
         { headers: { 'x-cg-demo-api-key': CG_API_KEY } }
       );
       if (!res.ok) throw new Error(`API error ${res.status}`);

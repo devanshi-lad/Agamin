@@ -54,9 +54,10 @@ const Home = () => {
 
   const fetchHomeData = useCallback(async () => {
     try {
+      const ids = "aave,cardano,avalanche-2,binancecoin,bitcoin,polkadot,ethereum,litecoin,pepe,matic-network,shiba-inu,solana,sui,tron,uniswap,ripple";
       const [coinsRes, globalRes] = await Promise.all([
         fetch(
-          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false&price_change_percentage=24h`,
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&sparkline=false&price_change_percentage=24h`,
           { headers: { 'x-cg-demo-api-key': CG_API_KEY } }
         ),
         fetch(`https://api.coingecko.com/api/v3/global`, {
@@ -210,7 +211,7 @@ const Home = () => {
               })}
             </div>
             <Link to="/market" className="mt-6 block text-center text-sm font-bold text-[#556069]/60 hover:text-[#556069] transition-colors">
-              See all 20 coins →
+              See all 16 coins →
             </Link>
           </motion.div>
 
